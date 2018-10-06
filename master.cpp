@@ -17,13 +17,23 @@ typedef struct TElmtList{
 typedef struct {
     address first;
 }List ;
+ //SELEKTOR 
+#define First(L) (L).first
+#define Next(P) (P)->next
+#define Info(P) (P)->info
+
+//KONSTANTA
+#define Nil NULL
+#define Infinity 99999
+
  
+
 bool IsEmpty(List L) {
     return ((L).first == NULL);
 }
  
 void createList(List *L) {
-    (*L).first = NULL;
+    First(*L) = NULL;
 }
  
 void Deallocation(address hapus) {
@@ -34,8 +44,8 @@ address Allocation(infotype x) {
     address NewElmt;
     NewElmt = (ElmtList*) malloc (sizeof(ElmtList));
  
-    NewElmt->info = x;
-    NewElmt->next = NULL;
+    Info(NewElmt) = x;
+    Next(NewElmt) = NULL;
  
     return NewElmt;
 }
@@ -45,8 +55,8 @@ void InsertFirst(List *L, infotype x) {
     NewElmt = Allocation(x);
  
     if (NewElmt != NULL) {
-        NewElmt->next = (*L).first;
-        (*L).first = NewElmt;
+        Next(NewElmt) = First(*L);
+        First(*L) = NewElmt;
     }
 }
  
@@ -55,8 +65,8 @@ void InsertAfter(address *PredElmt, infotype x) {
     NewElmt = Allocation(x);
  
     if (NewElmt != NULL) {
-        NewElmt->next = (*PredElmt)->next;
-        (*PredElmt)->next = NewElmt;
+        Next(NewElmt) = Next(*PredElmt);
+        Next(*PredElmt) = NewElmt;
     }
 }
  
@@ -65,9 +75,9 @@ void InsertLast(List *L, infotype x) {
         InsertFirst(&(*L), x);
     } else {
         address temp;
-        temp = (*L).first;
-        while (temp->next != NULL) {
-            temp = temp->next;
+        temp = First(*L);
+        while (Next(temp) != NULL) {
+            temp = Next(temp);
         }
         InsertAfter(&temp, x);
     }
@@ -76,10 +86,10 @@ void InsertLast(List *L, infotype x) {
 void DeleteFirst(List *L, infotype *hapus) {
     if (!IsEmpty(*L)) {
         address temp;
-        temp = (*L).first;
-        *hapus = temp->info;
-        (*L).first = (*L).first->next;
-        temp->next = NULL;
+        temp = First(*L);
+        *hapus = Info(temp);
+        First(*L) = Next(First(*L));
+        Next(temp) = NULL;
         Deallocation(temp);
     }
 }
@@ -87,10 +97,10 @@ void DeleteFirst(List *L, infotype *hapus) {
 void DeleteAfter(address pred, infotype *hapus) {
     if (pred->next != NULL) {
         address temp;
-        temp = pred->next;
-        *hapus = temp->info;
-        pred->next = temp->next;
-        temp->next = NULL;
+        temp = Next(pred);
+        *hapus = Info(temp);
+        Next(pred) = Next(temp);
+        Next(temp)= NULL;
         Deallocation(temp);
     }
 }
@@ -99,10 +109,10 @@ void DeleteLast(List *L, infotype *hapus) {
     if (!IsEmpty(*L)) {
         address temp, predTemp;
         predTemp = NULL;
-        temp = (*L).first;
+        temp = First(*L);
         while (temp->next != NULL) {
             predTemp = temp;
-            temp = temp->next;
+            temp =Next(temp);
         }
  
         if (temp == (*L).first) {
@@ -120,28 +130,31 @@ void reverseList (List *L){
 		Membalik elemen list, tanpa melakukan alokasi/dealokasi.
 	*/
 	address next,curr,prev;
-	curr = (*L).first;
+	curr = First(*L);
 	prev = NULL;
-	next = curr->next;
+	next = Next(curr);
 	
 	while (curr!= NULL){ 
-		next = curr -> next;
-		curr->next = prev ;
+		next = Next(curr);
+		Next(curr) = prev ;
 		prev=curr;
 		curr=next;
-	}(*L).first=prev;
+	}First(*L)=prev;
 }
 
 void printInfo (List L){
 	
 	cout<<"[";
 	if(!IsEmpty(L)){
-		address temp = L.first;
-		while(temp->next!=NULL){
-			cout<<temp -> info <<", ";
-			temp = temp->next;
+		address temp =First(L);
+		while(Next(temp)!=NULL){
+			cout<<Info(temp) <<", ";
+			temp = Next(temp);
 		}
-		cout<<temp->info;
+		cout<<Info(temp);
 	}
 	cout<<"]"<<endl;
 }
+
+
+

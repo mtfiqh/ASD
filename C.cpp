@@ -10,14 +10,17 @@ void copyPrima(List L, List *L2){
 	/*	I.S. L terdefinisi, boleh kosong.
         L2 terdifinisi dan kosong.
 		F.S. copy isi dari L ke L2 yang merupakan
-        bilangan prima
+        bilangan
 	*/
     address temp;
 }
-//gunakan main berikut untuk menguji output
+
 int main(){
 	List L,L2;
 	createList(&L);
 	createList(&L2);
-	
+	/*	I.S. L dan L2 terdefinisi
+		F.S. isi List L, berhenti input ketika
+        L di inputkan -1.
+	*/
 }
